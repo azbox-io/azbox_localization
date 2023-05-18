@@ -11,7 +11,7 @@ Easy and Fast internationalization for your Flutter Apps
 ![GitHub contributors](https://img.shields.io/github/contributors/azbox-io/azbox-localization?style=flat-square)
 ![GitHub repo size](https://img.shields.io/github/repo-size/azbox-io/azbox-localization?style=flat-square)
 ![GitHub forks](https://img.shields.io/github/forks/azbox-io/azbox-localization?style=flat-square)
-![GitHub stars](https://img.shields.io/github/starsazbox-io/azbox-localization?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/azbox-io/azbox-localization?style=flat-square)
 ![Coveralls github branch](https://img.shields.io/coveralls/github/azbox-io/azbox-localization/dev?style=flat-square)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/azbox-io/azbox-localization/Flutter%20Tester?longCache=true&style=flat-square&logo=github)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/azbox-io/azbox-localization?style=flat-square)
