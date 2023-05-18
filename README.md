@@ -127,20 +127,20 @@ context.setLocale(Locale('en', 'US'));
 print(context.locale.toString());
 ```
 
-### 🔥 Translate `tr()`
+### 🔥 Translate `translate()`
 
 Main function for translate your language keys
 
-You can use extension methods of [String] or [Text] widget, you can also use `tr()` as a static function.
+You can use extension methods of [String] or [Text] widget, you can also use `translate()` as a static function.
 
 ```dart
-Text('title').tr() //Text widget
+Text('title').translate() //Text widget
 
-print('title'.tr()); //String
+print('title'.translate()); //String
 
-var title = tr('title') //Static function
+var title = translate('title') //Static function
 
-Text(context.tr('title')) //Extension on BuildContext
+Text(context.translate('title')) //Extension on BuildContext
 ```
 
 #### Arguments:
@@ -168,16 +168,16 @@ Example:
 
 ```dart
 // args
-Text('msg').tr(args: ['Azbox localization', 'Dart']),
+Text('msg').translate(args: ['Azbox localization', 'Dart']),
 
 // namedArgs
-Text('msg_named').tr(namedArgs: {'lang': 'Dart'}),
+Text('msg_named').translate(namedArgs: {'lang': 'Dart'}),
 
 // args and namedArgs
-Text('msg_mixed').tr(args: ['Azbox localization'], namedArgs: {'lang': 'Dart'}),
+Text('msg_mixed').translate(args: ['Azbox localization'], namedArgs: {'lang': 'Dart'}),
 
 // gender
-Text('gender').tr(gender: _gender ? "female" : "male"),
+Text('gender').translate(gender: _gender ? "female" : "male"),
 
 ```
 
@@ -199,7 +199,7 @@ Example:
 ```
 
 ```dart
-print('example.helloWorld'.tr()); //Output: Hello World!
+print('example.helloWorld'.translate()); //Output: Hello World!
 ```
 
 You can also do nested anonymous and named arguments inside the linked messages.
@@ -215,7 +215,7 @@ Example:
 }
 ```
 ```dart
-print('dateLogging'.tr(namedArguments: {'currentDate': DateTime.now().toIso8601String()})); //Output: INFO: the date today is 2020-11-27T16:40:42.657.
+print('dateLogging'.translate(namedArguments: {'currentDate': DateTime.now().toIso8601String()})); //Output: INFO: the date today is 2020-11-27T16:40:42.657.
 ```
 
 #### Formatting linked translations:
@@ -245,7 +245,7 @@ Example:
 Output:
 
 ```dart
-print('example.emptyNameError'.tr()); //Output: Please fill in your full name
+print('example.emptyNameError'.translate()); //Output: Please fill in your full name
 ```
 
 ### 🔥 Reset locale `resetLocale()`
@@ -259,7 +259,7 @@ RaisedButton(
   onPressed: (){
     context.resetLocale();
   },
-  child: Text(LocaleKeys.reset_locale).tr(),
+  child: Text(LocaleKeys.reset_locale).translate(),
 )
 ```
 
@@ -284,7 +284,7 @@ RaisedButton(
   onPressed: (){
     context.deleteSaveLocale();
   },
-  child: Text(LocaleKeys.reset_locale).tr(),
+  child: Text(LocaleKeys.reset_locale).translate(),
 )
 ```
 
@@ -357,9 +357,9 @@ import 'generated/locale_keys.g.dart';
 How to use generated keys:
 
 ```dart
-print(LocaleKeys.title.tr()); //String
+print(LocaleKeys.title.translate()); //String
 //or
-Text(LocaleKeys.title).tr(); //Widget
+Text(LocaleKeys.title).translate(); //Widget
 ```
 
 ## ➕ Extensions helpers
