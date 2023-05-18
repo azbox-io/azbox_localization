@@ -5,17 +5,17 @@
 Easy and Fast internationalization for your Flutter Apps
 </h1>
 
-[![Pub Version](https://img.shields.io/pub/v/azbox-localization?style=flat-square&logo=dart)](https://pub.dev/packages/azbox-localization)
-![Code Climate issues](https://img.shields.io/github/issues/azbox-io/azbox-localization?style=flat-square)
-![GitHub closed issues](https://img.shields.io/github/issues-closed/azbox-io/azbox-localization?style=flat-square)
-![GitHub contributors](https://img.shields.io/github/contributors/azbox-io/azbox-localization?style=flat-square)
-![GitHub repo size](https://img.shields.io/github/repo-size/azbox-io/azbox-localization?style=flat-square)
-![GitHub forks](https://img.shields.io/github/forks/azbox-io/azbox-localization?style=flat-square)
-![GitHub stars](https://img.shields.io/github/stars/azbox-io/azbox-localization?style=flat-square)
-![Coveralls github branch](https://img.shields.io/coveralls/github/azbox-io/azbox-localization/dev?style=flat-square)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/azbox-io/azbox-localization/Flutter%20Tester?longCache=true&style=flat-square&logo=github)
-![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/azbox-io/azbox-localization?style=flat-square)
-![GitHub license](https://img.shields.io/github/license/azbox-io/azbox-localization?style=flat-square)
+[![Pub Version](https://img.shields.io/pub/v/azbox-localization?style=flat-square&logo=dart)](https://pub.dev/packages/azbox_localization)
+![Code Climate issues](https://img.shields.io/github/issues/azbox-io/azbox_localization?style=flat-square)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/azbox-io/azbox_localization?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/azbox-io/azbox_localization?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/azbox-io/azbox_localization?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/azbox-io/azbox_localization?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/azbox-io/azbox_localization?style=flat-square)
+![Coveralls github branch](https://img.shields.io/coveralls/github/azbox-io/azbox_localization/dev?style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/azbox-io/azbox_localization/Flutter%20Tester?longCache=true&style=flat-square&logo=github)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/azbox-io/azbox_localization?style=flat-square)
+![GitHub license](https://img.shields.io/github/license/azbox-io/azbox_localization?style=flat-square)
 
 ## Why Azbox?
 
