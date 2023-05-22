@@ -1,3 +1,4 @@
+import 'package:azbox/src/codes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,22 +13,12 @@ part 'extensions/stringx.dart';
 
 class Azbox extends StatefulWidget {
 
-  /// The AZbox API Key.
-  /// create it here https://azbox.io/
-  final String apiKey;
-
-  /// The project Id associated with your project.
-  final String project;
-
   /// Place for your main page widget.
   final Widget child;
 
   /// List of supported locales.
   /// {@macro flutter.widgets.widgetsApp.supportedLocales}
-  final List<Locale> supportedLocales;
-
-  /// Locale when the locale is not in the list
-  final Locale? fallbackLocale;
+  late List<Locale> supportedLocales = [];
 
   /// Overrides device locale.
   final Locale? startLocale;
@@ -50,17 +41,12 @@ class Azbox extends StatefulWidget {
 
   Azbox({
     Key? key,
-    required this.apiKey,
-    required this.project,
     required this.child,
-    required this.supportedLocales,
-    this.fallbackLocale,
     this.startLocale,
     this.useFallbackTranslations = false,
     this.saveLocale = true,
     this.errorWidget,
-  })  : assert(supportedLocales.isNotEmpty),
-        super(key: key);
+  })  : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -73,8 +59,11 @@ class Azbox extends StatefulWidget {
   /// ensureInitialized needs to be called in main
   /// so that savedLocale is loaded and used from the
   /// start.
-  static Future<void> ensureInitialized() async =>
-      await AzboxController.initAzbox();
+  ///
+  /// apiKey: The AZbox API Key. Create it here https://azbox.io/
+  /// projectId: The project Id associated with your project.
+  static Future<void> ensureInitialized({required String apiKey, required String projectId}) async =>
+      await AzboxController.initAzbox(apiKey, projectId);
 }
 
 class _AzboxState extends State<Azbox> {
@@ -85,11 +74,7 @@ class _AzboxState extends State<Azbox> {
   @override
   void initState() {
     localizationController = AzboxController(
-      apiKey: widget.apiKey,
-      project: widget.project,
       saveLocale: widget.saveLocale,
-      fallbackLocale: widget.fallbackLocale,
-      supportedLocales: widget.supportedLocales,
       startLocale: widget.startLocale,
       useFallbackTranslations: widget.useFallbackTranslations,
       onLoadError: (FlutterError e) {
@@ -98,10 +83,13 @@ class _AzboxState extends State<Azbox> {
         });
       },
     );
+
+    widget.supportedLocales = localizationController!.supportedLocales;
     // causes localization to rebuild with new language
     localizationController!.addListener(() {
       if (mounted) setState(() {});
     });
+
     super.initState();
   }
 
@@ -163,9 +151,6 @@ class _AzboxProvider extends InheritedWidget {
   /// Get current locale
   Locale get locale => _localeState.locale;
 
-  /// Get fallback locale
-  Locale? get fallbackLocale => parent.fallbackLocale;
-
   /// Change app locale
   Future<void> setLocale(Locale locale) async {
     // Check old locale
@@ -206,8 +191,8 @@ class _AzboxDelegate extends LocalizationsDelegate<Localization> {
     }
   }
 
-  @override
-  bool isSupported(Locale locale) => supportedLocales!.contains(locale);
+   @override
+   bool isSupported(Locale locale) => supportedLocales!.contains(locale);
 
   @override
   Future<Localization> load(Locale value) async {

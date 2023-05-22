@@ -8,8 +8,6 @@ void main() {
 
   runApp(
     Azbox(
-      supportedLocales: [Locale('en', 'US'), Locale('de', 'DE'), Locale('es', 'ES')],
-      fallbackLocale: Locale('es', 'ES'),
       apiKey: Constants.kAzboxApiKey,
       project: Constants.kAzboxProject,
       child: const MyApp()));

@@ -1,4 +1,5 @@
 import 'package:azbox/azbox.dart';
+import 'package:azbox/src/codes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl_standalone.dart'
@@ -11,14 +12,14 @@ import 'translations.dart';
 class AzboxController extends ChangeNotifier {
   static Locale? _savedLocale;
   static late Locale _deviceLocale;
+  static late List<Locale> _supportedLocales = [];
+  static late AzboxAPI? _azboxApi;
 
   late Locale _locale;
-  Locale? _fallbackLocale;
+  late List<Locale> supportedLocales = [];
 
   final Function(FlutterError e) onLoadError;
   // ignore: prefer_typing_uninitialized_variables
-  final String apiKey;
-  final String project;
   final bool useFallbackTranslations;
   final bool saveLocale;
   Translations? _translations, _fallbackTranslations;
@@ -26,21 +27,20 @@ class AzboxController extends ChangeNotifier {
   Translations? get fallbackTranslations => _fallbackTranslations;
 
   AzboxController({
-    required this.apiKey,
-    required this.project,
-    required List<Locale> supportedLocales,
     required this.useFallbackTranslations,
     required this.saveLocale,
     required this.onLoadError,
     Locale? startLocale,
-    Locale? fallbackLocale,
     Locale? forceLocale, // used for testing
   }) {
-    _fallbackLocale = fallbackLocale;
+    supportedLocales = _supportedLocales;
     if (forceLocale != null) {
       _locale = forceLocale;
+    } else if (_savedLocale == null && startLocale == null) {
+      _locale = _deviceLocale; //La primera vez es así? Pensar bien
+      selectLocaleFromApi();
     } else if (_savedLocale == null && startLocale != null) {
-      _locale = _getFallbackLocale(supportedLocales, startLocale);
+      _locale = startLocale;
       if (kDebugMode) {
         print('Start locale loaded ${_locale.toString()}');
       }
@@ -50,66 +50,96 @@ class AzboxController extends ChangeNotifier {
       if (kDebugMode) {
         print('Saved locale loaded ${_savedLocale.toString()}');
       }
-      _locale = selectLocaleFrom(
-        supportedLocales,
-        _savedLocale!,
-        fallbackLocale: fallbackLocale,
-      );
+      // _locale = selectLocaleFrom(
+      //   supportedLocales,
+      //   _savedLocale!
+      // );
     } else {
       // From Device Locale
-      _locale = selectLocaleFrom(
-        supportedLocales,
-        _deviceLocale,
-        fallbackLocale: fallbackLocale,
-      );
+      // _locale = selectLocaleFrom(
+      //   supportedLocales,
+      //   _deviceLocale,
+      // );
     }
   }
 
   @visibleForTesting
   static Locale selectLocaleFrom(
       List<Locale> supportedLocales,
-      Locale deviceLocale, {
-        Locale? fallbackLocale,
-      }) {
+      Locale deviceLocale) {
     final selectedLocale = supportedLocales.firstWhere(
           (locale) => locale.supports(deviceLocale),
-      orElse: () => _getFallbackLocale(supportedLocales, fallbackLocale),
+      orElse: () => supportedLocales.first,
     );
     return selectedLocale;
   }
 
-  //Get fallback Locale
-  static Locale _getFallbackLocale(
-      List<Locale> supportedLocales, Locale? fallbackLocale) {
-    //If fallbackLocale not set then return first from supportedLocales
-    if (fallbackLocale != null) {
-      return fallbackLocale;
-    } else {
-      return supportedLocales.first;
-    }
+  Future<void> selectLocaleFromApi() async {
+    supportedLocales = await getSupportedLocales();
+
+    _locale = selectLocaleFrom(
+      supportedLocales,
+      _deviceLocale,
+    );
+
+    print('Supported locales: ' + supportedLocales.toString());
   }
+
+  static Future<List<Locale>> getSupportedLocales() async {
+    List<dynamic> projects = [];
+    List<Locale> locales = [];
+
+    if (_azboxApi != null) {
+      projects = await _azboxApi!.getProjects();
+    }
+
+    var project = projects.firstWhere((p) => p['id'] == _azboxApi!.projectId, orElse: () => null);
+
+    if (project != null) {
+
+      List projectLanguages = projects[0]['data']['languages'];
+      for (String projectLanguage in projectLanguages) {
+        String? localeStr = Code.codes[projectLanguage];
+        if (localeStr != null) {
+          locales.add(localeStr.toLocale());
+        }
+      }
+    }
+    return locales;
+  }
+
+  // //Get fallback Locale
+  // static Locale _getFallbackLocale(
+  //     List<Locale> supportedLocales, Locale? fallbackLocale) {
+  //   //If fallbackLocale not set then return first from supportedLocales
+  //   if (fallbackLocale != null) {
+  //     return fallbackLocale;
+  //   } else {
+  //     return supportedLocales.first;
+  //   }
+  // }
 
   Future loadTranslations() async {
     Map<String, dynamic> data;
     try {
       data = await loadTranslationData(_locale);
       _translations = Translations(data);
-      if (useFallbackTranslations && _fallbackLocale != null) {
-        Map<String, dynamic>? baseLangData;
-        if (_locale.countryCode != null && _locale.countryCode!.isNotEmpty) {
-          baseLangData =
-          await loadBaseLangTranslationData(Locale(locale.languageCode));
-        }
-        data = await loadTranslationData(_fallbackLocale!);
-        if (baseLangData != null) {
-          try {
-            data.addAll(baseLangData);
-          } on UnsupportedError {
-            data = Map.of(data)..addAll(baseLangData);
-          }
-        }
-        _fallbackTranslations = Translations(data);
-      }
+      // if (useFallbackTranslations && _fallbackLocale != null) {
+      //   Map<String, dynamic>? baseLangData;
+      //   if (_locale.countryCode != null && _locale.countryCode!.isNotEmpty) {
+      //     baseLangData =
+      //     await loadBaseLangTranslationData(Locale(locale.languageCode));
+      //   }
+      //   data = await loadTranslationData(_fallbackLocale!);
+      //   if (baseLangData != null) {
+      //     try {
+      //       data.addAll(baseLangData);
+      //     } on UnsupportedError {
+      //       data = Map.of(data)..addAll(baseLangData);
+      //     }
+      //   }
+      //   _fallbackTranslations = Translations(data);
+      // }
     } on FlutterError catch (e) {
       onLoadError(e);
     } catch (e) {
@@ -133,11 +163,9 @@ class AzboxController extends ChangeNotifier {
   Future<Map<String, dynamic>> loadTranslationData(Locale locale) async {
     late Map<String, dynamic>? data;
 
-    var azboxApi = AzboxAPI(
-        apiKey: apiKey,
-        project: project);
-
-    data = await azboxApi.getKeywords(language: locale.languageCode.toUpperCase());
+    if (_azboxApi != null) {
+      data = await _azboxApi?.getKeywords(language: locale.languageCode.toUpperCase());
+    }
 
     if (data == null) return {};
 
@@ -165,12 +193,16 @@ class AzboxController extends ChangeNotifier {
     }
   }
 
-  static Future<void> initAzbox() async {
+  static Future<void> initAzbox(String apiKey, String projectId) async {
     final preferences = await SharedPreferences.getInstance();
     final strLocale = preferences.getString('locale');
     _savedLocale = strLocale?.toLocale();
     final foundPlatformLocale = await findSystemLocale();
     _deviceLocale = foundPlatformLocale.toLocale();
+    _azboxApi = AzboxAPI(
+        apiKey: apiKey,
+        project: projectId);
+    _supportedLocales = await getSupportedLocales();
     if (kDebugMode) {
       print('Azbox localization initialized');
     }

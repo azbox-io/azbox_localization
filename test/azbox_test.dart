@@ -22,9 +22,8 @@ void main() {
   group('localization', () {
     var r1 = AzboxController(
         apiKey: '',
-        project: '',
+        projectId: '',
         forceLocale: const Locale('en'),
-        supportedLocales: const [Locale('en')],
         useFallbackTranslations: false,
         saveLocale: false,
         onLoadError: (FlutterError e) {
@@ -33,9 +32,8 @@ void main() {
         );
     var r2 = AzboxController(
         apiKey: '',
-        project: '',
+        projectId: '',
         forceLocale: const Locale('en', 'us'),
-        supportedLocales: const [Locale('en', 'us')],
         useFallbackTranslations: false,
         onLoadError: (FlutterError e) {
           log(e.toString());
@@ -76,15 +74,9 @@ void main() {
             () async {
           await AzboxController(
             apiKey: '',
-            project: '',
+            projectId: '',
             forceLocale: const Locale('es', 'AR'),
-            supportedLocales: const [
-              Locale('en'),
-              Locale('es'),
-              Locale('es', 'AR')
-            ],
             useFallbackTranslations: true,
-            fallbackLocale: const Locale('en'),
             onLoadError: (FlutterError e) {
               throw e;
             },
@@ -139,9 +131,7 @@ void main() {
       await Azbox.ensureInitialized();
       final controller =AzboxController(
         apiKey: '',
-        project: '',
-        supportedLocales: const [Locale('en'), Locale('fb')],
-        fallbackLocale: const Locale('fb'),
+        projectId: '',
         useFallbackTranslations: true,
         onLoadError: (FlutterError e) {
           log(e.toString());
@@ -162,9 +152,7 @@ void main() {
           await Azbox.ensureInitialized();
           final controller = AzboxController(
             apiKey: '',
-            project: '',
-            supportedLocales: const [Locale('en'), Locale('fb')],
-            fallbackLocale: const Locale('fb'),
+            projectId: '',
             useFallbackTranslations: true,
             onLoadError: (FlutterError e) {
               log(e.toString());
@@ -229,10 +217,8 @@ void main() {
     group('tr', () {
       var r = AzboxController(
           apiKey: '',
-          project: '',
+          projectId: '',
           forceLocale: const Locale('en'),
-          supportedLocales: const [Locale('en'), Locale('fb')],
-          fallbackLocale: const Locale('fb'),
           useFallbackTranslations: true,
           onLoadError: (FlutterError e) {
             log(e.toString());

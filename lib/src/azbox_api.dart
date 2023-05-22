@@ -32,6 +32,8 @@ class AzboxAPI {
   }) : _apiKey = apiKey,
        _project = project;
 
+  String get projectId => _project;
+
   Future<Result<void>> projects() async {
     var headers = <String, String>{};
     headers['Content-Type'] = 'application/json';

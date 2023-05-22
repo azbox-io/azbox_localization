@@ -82,9 +82,6 @@ extension BuildContextAzboxExtension on BuildContext {
   List<Locale> get supportedLocales =>
       Azbox.of(this)!.supportedLocales;
 
-  /// Get fallback locale
-  Locale? get fallbackLocale => Azbox.of(this)!.fallbackLocale;
-
   /// {@macro flutter.widgets.widgetsApp.localizationsDelegates}
   /// return
   /// ```dart
