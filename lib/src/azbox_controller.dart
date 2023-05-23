@@ -12,11 +12,12 @@ import 'translations.dart';
 class AzboxController extends ChangeNotifier {
   static Locale? _savedLocale;
   static late Locale _deviceLocale;
-  static List<Locale> _supportedLocales = [];
+  static List<Locale> supportedLocales = [];
+  static Locale internalLocale = Locale('', '');
   static late AzboxAPI? _azboxApi;
 
   late Locale _locale;
-  late List<Locale> supportedLocales = [];
+  late List<Locale> locales = [];
 
   final Function(FlutterError e) onLoadError;
   // ignore: prefer_typing_uninitialized_variables
@@ -33,7 +34,7 @@ class AzboxController extends ChangeNotifier {
     Locale? startLocale,
     Locale? forceLocale, // used for testing
   }) {
-    supportedLocales = _supportedLocales;
+    locales = supportedLocales;
     if (forceLocale != null) {
       _locale = forceLocale;
     } else if (_savedLocale == null && startLocale != null) {
@@ -44,15 +45,16 @@ class AzboxController extends ChangeNotifier {
         print('Saved locale loaded ${_savedLocale.toString()}');
       }
       _locale = selectLocaleFrom(
-        supportedLocales,
+          locales,
         _savedLocale!
       );
     } else {
       _locale = selectLocaleFrom(
-        supportedLocales,
+        locales,
         _deviceLocale,
       );
     }
+    internalLocale = _locale;
     if (kDebugMode) {
       print('Locale loaded ${_locale.toString()}');
     }
@@ -179,10 +181,10 @@ class AzboxController extends ChangeNotifier {
     _azboxApi = AzboxAPI(
         apiKey: apiKey,
         project: projectId);
-    _supportedLocales = await getSupportedLocales();
+    supportedLocales = await getSupportedLocales();
 
     if (kDebugMode) {
-      print('Supported locales: $_supportedLocales');
+      print('Supported locales: $supportedLocales');
       print('Azbox localization initialized');
     }
   }

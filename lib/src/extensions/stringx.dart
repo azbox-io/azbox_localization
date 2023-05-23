@@ -23,4 +23,6 @@ extension Stringx on String {
         return Locale(localeList.first);
     }
   }
+
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
 }

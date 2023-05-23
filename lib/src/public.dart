@@ -24,10 +24,10 @@ import 'localization.dart';
 /// }
 /// ```
 /// ```dart
-/// Text('msg').tr(args: ['Azbox localization', 'Dart']), // args
-/// Text('msg_named').tr(namedArgs: {'lang': 'Dart'}),   // namedArgs
-/// Text('msg_mixed').tr(args: ['Azbox localization'], namedArgs: {'lang': 'Dart'}), // args and namedArgs
-/// Text('gender').tr(gender: _gender ? "female" : "male"), // gender
+/// Text('msg').translate(args: ['Azbox localization', 'Dart']), // args
+/// Text('msg_named').translate(namedArgs: {'lang': 'Dart'}),   // namedArgs
+/// Text('msg_mixed').translate(args: ['Azbox localization'], namedArgs: {'lang': 'Dart'}), // args and namedArgs
+/// Text('gender').translate(gender: _gender ? "female" : "male"), // gender
 /// ```
 /// {@endtemplate}
 String translate(
@@ -35,13 +35,14 @@ String translate(
       BuildContext? context,
       List<String>? args,
       Map<String, String>? namedArgs,
+      bool? capitalize = true,
       String? gender,
     }) {
   return context != null
       ? Localization.of(context)!
-      .translate(key, args: args, namedArgs: namedArgs, gender: gender)
+      .translate(key, args: args, namedArgs: namedArgs, gender: gender, capitalize: capitalize)
       : Localization.instance
-      .translate(key, args: args, namedArgs: namedArgs, gender: gender);
+      .translate(key, args: args, namedArgs: namedArgs, gender: gender, capitalize: capitalize);
 }
 
 bool translateExists(String key) {

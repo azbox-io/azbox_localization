@@ -49,10 +49,11 @@ extension StringTranslateExtension on String {
     List<String>? args,
     Map<String, String>? namedArgs,
     String? gender,
+    bool? capitalize = true,
     BuildContext? context,
   }) =>
       az.translate(this,
-          context: context, args: args, namedArgs: namedArgs, gender: gender);
+          context: context, args: args, namedArgs: namedArgs, gender: gender, capitalize: capitalize);
 
   bool trExists() => az.translateExists(this);
 }

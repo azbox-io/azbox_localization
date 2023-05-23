@@ -39,6 +39,7 @@ class Localization {
       String key, {
         List<String>? args,
         Map<String, String>? namedArgs,
+        bool? capitalize = true,
         String? gender,
       }) {
     late String res;
@@ -52,6 +53,9 @@ class Localization {
     res = _replaceLinks(res);
     res = _replaceNamedArgs(res, namedArgs);
 
+    if (capitalize != null && capitalize) {
+      return _replaceArgs(res, args).toCapitalized();
+    }
     return _replaceArgs(res, args);
   }
 

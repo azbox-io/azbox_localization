@@ -84,7 +84,7 @@ class _AzboxState extends State<Azbox> {
       },
     );
 
-    widget.supportedLocales = localizationController!.supportedLocales;
+    widget.supportedLocales = localizationController!.locales;
     // causes localization to rebuild with new language
     localizationController!.addListener(() {
       if (mounted) setState(() {});
