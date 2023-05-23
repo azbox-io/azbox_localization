@@ -52,12 +52,12 @@ import 'package:azbox/azbox.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Azbox.ensureInitialized();
+  await Azbox.ensureInitialized(
+    apiKey: 'Your API Key',
+    projectId: 'Your project ID');
   
   runApp(
     Azbox(
-      supportedLocales: [Locale('en', 'US'), Locale('de', 'DE')],
-      fallbackLocale: Locale('en', 'US'),
       child: MyApp()
     ),
   );
@@ -84,13 +84,9 @@ class MyApp extends StatelessWidget {
 | ----------------------- | -------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | key                     | false    |                           | Widget key.                                                                                                                                                                   |
 | child                   | true     |                           | Place for your main page widget.                                                                                                                                              |
-| supportedLocales        | true     |                           | List of supported locales.                                                                                                                                                    |
-| fallbackLocale          | false    |                           | Returns the locale when the locale is not in the list `supportedLocales`.                                                                                                     |
 | startLocale             | false    |                           | Overrides device locale.                                                                                                                                                      |
 | saveLocale              | false    | `true`                    | Save locale in device storage.                                                                                                                                                |
 | useFallbackTranslations | false    | `false`                   | If a localization key is not found in the locale file, try to use the fallbackLocale file.                                                                                    |
-| useOnlyLangCode         | false    | `false`                   | Trigger for using only language code for reading localization files.</br></br>Example:</br>`en.json //useOnlyLangCode: true`</br>`en-US.json //useOnlyLangCode: false`        |
-| errorWidget             | false    | `FutureErrorWidget()`     | Shows a custom error widget when an error occurs.                                                                                                                             |
 
 ## Usage
 
@@ -100,11 +96,15 @@ Call `Azbox.ensureInitialized()` in your main before runApp.
 
 ```dart
 void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  
   // ...
   // Needs to be called so that we can await for Azbox.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Azbox.ensureInitialized();
+  await Azbox.ensureInitialized(
+    apiKey: 'Your API Key',
+    projectId: 'Your project ID');
+    
   // ...
   runApp(....)
   // ...
@@ -292,14 +292,13 @@ RaisedButton(
 
 At any time, you can take the main [properties](#-azbox-localization-widget-properties) of the Azbox localization widget using [BuildContext].
 
-Are supported: supportedLocales, fallbackLocale, localizationDelegates.
+Are supported: supportedLocales, localizationDelegates.
 
 Example:
 
 ```dart
 print(context.supportedLocales); // output: [en_US, ar_DZ, de_DE, ru_RU]
 
-print(context.fallbackLocale); // output: en_US
 ```
 
 ## 💻 Code generation
@@ -332,7 +331,6 @@ Steps:
   void main(){
     runApp(Azbox(
       child: MyApp(),
-      supportedLocales: [Locale('en', 'US'), Locale('ar', 'DZ')],
     ));
   }
   ...
