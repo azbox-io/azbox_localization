@@ -12,7 +12,7 @@ import 'translations.dart';
 class AzboxController extends ChangeNotifier {
   static Locale? _savedLocale;
   static late Locale _deviceLocale;
-  static late List<Locale> _supportedLocales = [];
+  static List<Locale> _supportedLocales = [];
   static late AzboxAPI? _azboxApi;
 
   late Locale _locale;
@@ -36,30 +36,25 @@ class AzboxController extends ChangeNotifier {
     supportedLocales = _supportedLocales;
     if (forceLocale != null) {
       _locale = forceLocale;
-    } else if (_savedLocale == null && startLocale == null) {
-      _locale = _deviceLocale; //La primera vez es así? Pensar bien
-      selectLocaleFromApi();
     } else if (_savedLocale == null && startLocale != null) {
       _locale = startLocale;
-      if (kDebugMode) {
-        print('Start locale loaded ${_locale.toString()}');
-      }
     }
-    // If saved locale then get
     else if (saveLocale && _savedLocale != null) {
       if (kDebugMode) {
         print('Saved locale loaded ${_savedLocale.toString()}');
       }
-      // _locale = selectLocaleFrom(
-      //   supportedLocales,
-      //   _savedLocale!
-      // );
+      _locale = selectLocaleFrom(
+        supportedLocales,
+        _savedLocale!
+      );
     } else {
-      // From Device Locale
-      // _locale = selectLocaleFrom(
-      //   supportedLocales,
-      //   _deviceLocale,
-      // );
+      _locale = selectLocaleFrom(
+        supportedLocales,
+        _deviceLocale,
+      );
+    }
+    if (kDebugMode) {
+      print('Locale loaded ${_locale.toString()}');
     }
   }
 
@@ -72,17 +67,6 @@ class AzboxController extends ChangeNotifier {
       orElse: () => supportedLocales.first,
     );
     return selectedLocale;
-  }
-
-  Future<void> selectLocaleFromApi() async {
-    supportedLocales = await getSupportedLocales();
-
-    _locale = selectLocaleFrom(
-      supportedLocales,
-      _deviceLocale,
-    );
-
-    print('Supported locales: ' + supportedLocales.toString());
   }
 
   static Future<List<Locale>> getSupportedLocales() async {
@@ -107,17 +91,6 @@ class AzboxController extends ChangeNotifier {
     }
     return locales;
   }
-
-  // //Get fallback Locale
-  // static Locale _getFallbackLocale(
-  //     List<Locale> supportedLocales, Locale? fallbackLocale) {
-  //   //If fallbackLocale not set then return first from supportedLocales
-  //   if (fallbackLocale != null) {
-  //     return fallbackLocale;
-  //   } else {
-  //     return supportedLocales.first;
-  //   }
-  // }
 
   Future loadTranslations() async {
     Map<String, dynamic> data;
@@ -163,8 +136,12 @@ class AzboxController extends ChangeNotifier {
   Future<Map<String, dynamic>> loadTranslationData(Locale locale) async {
     late Map<String, dynamic>? data;
 
+    String language = Code.codes.keys.firstWhere(
+        (k) =>  Code.codes[k] == locale.toStringWithSeparator(),
+        orElse: () => Code.codes.keys.first);
+
     if (_azboxApi != null) {
-      data = await _azboxApi?.getKeywords(language: locale.languageCode.toUpperCase());
+      data = await _azboxApi?.getKeywords(language: language.toUpperCase());
     }
 
     if (data == null) return {};
@@ -203,7 +180,9 @@ class AzboxController extends ChangeNotifier {
         apiKey: apiKey,
         project: projectId);
     _supportedLocales = await getSupportedLocales();
+
     if (kDebugMode) {
+      print('Supported locales: $_supportedLocales');
       print('Azbox localization initialized');
     }
   }

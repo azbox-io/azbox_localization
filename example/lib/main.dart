@@ -4,12 +4,12 @@ import 'package:azbox/azbox.dart';
 
 void main() {
 
-  Azbox.ensureInitialized();
+  Azbox.ensureInitialized(
+    apiKey: Constants.kAzboxApiKey,
+    projectId: Constants.kAzboxProject,);
 
   runApp(
     Azbox(
-      apiKey: Constants.kAzboxApiKey,
-      project: Constants.kAzboxProject,
       child: const MyApp()));
 }
 
