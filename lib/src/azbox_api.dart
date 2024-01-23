@@ -118,7 +118,6 @@ class AzboxAPI {
 
     if (projectsResult is ValueResult && projectsResult.isValue) {
       List<dynamic> projectList = projectsResult.value;
-      print('<----- projectList: ${projectList.length}');
       Map<String, dynamic> projects = {};
       for (var project in projectList) {
         project['data']['id'] = project['id'];

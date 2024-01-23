@@ -137,7 +137,6 @@ class AzboxController extends ChangeNotifier {
         strategy: AsyncOrCacheStrategy(),
       );
     }
-    print('<---- data: $data');
     // Set last date time loaded
     CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
 
