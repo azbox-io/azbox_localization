@@ -1,3 +1,4 @@
+import 'package:azbox/src/cache_strategy/storage/cache_storage_impl.dart';
 import 'package:azbox/src/codes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ part 'extensions/localex.dart';
 part 'extensions/stringx.dart';
 
 class Azbox extends StatefulWidget {
-
   /// Place for your main page widget.
   final Widget child;
 
@@ -46,15 +46,14 @@ class Azbox extends StatefulWidget {
     this.useFallbackTranslations = false,
     this.saveLocale = true,
     this.errorWidget,
-  })  : super(key: key);
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
   _AzboxState createState() => _AzboxState();
 
   // ignore: library_private_types_in_public_api
-  static _AzboxProvider? of(BuildContext context) =>
-      _AzboxProvider.of(context);
+  static _AzboxProvider? of(BuildContext context) => _AzboxProvider.of(context);
 
   /// ensureInitialized needs to be called in main
   /// so that savedLocale is loaded and used from the
@@ -62,8 +61,10 @@ class Azbox extends StatefulWidget {
   ///
   /// apiKey: The AZbox API Key. Create it here https://azbox.io/
   /// projectId: The project Id associated with your project.
-  static Future<void> ensureInitialized({required String apiKey, required String projectId}) async =>
-      await AzboxController.initAzbox(apiKey, projectId);
+  static Future<void> ensureInitialized({required String apiKey, required String projectId}) async {
+    await CacheStorage.setUpHive();
+    await AzboxController.initAzbox(apiKey, projectId);
+  }
 }
 
 class _AzboxState extends State<Azbox> {
@@ -102,9 +103,7 @@ class _AzboxState extends State<Azbox> {
   @override
   Widget build(BuildContext context) {
     if (translationsLoadError != null) {
-      return widget.errorWidget != null
-          ? widget.errorWidget!(translationsLoadError)
-          : ErrorWidget(translationsLoadError!);
+      return widget.errorWidget != null ? widget.errorWidget!(translationsLoadError) : ErrorWidget(translationsLoadError!);
     }
     return _AzboxProvider(
       widget,
@@ -134,17 +133,16 @@ class _AzboxProvider extends InheritedWidget {
   ///   ],
   /// ```
   List<LocalizationsDelegate> get delegates => [
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ];
 
   /// Get List of supported locales
   List<Locale> get supportedLocales => parent.supportedLocales;
 
-  _AzboxProvider(this.parent, this._localeState,
-      {Key? key, required this.delegate})
+  _AzboxProvider(this.parent, this._localeState, {Key? key, required this.delegate})
       : currentLocale = _localeState.locale,
         super(key: key, child: parent.child);
 
@@ -176,23 +174,21 @@ class _AzboxProvider extends InheritedWidget {
     return oldWidget.currentLocale != locale;
   }
 
-  static _AzboxProvider? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<_AzboxProvider>();
+  static _AzboxProvider? of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<_AzboxProvider>();
 }
 
 class _AzboxDelegate extends LocalizationsDelegate<Localization> {
   final List<Locale>? supportedLocales;
   final AzboxController? localizationController;
 
-  _AzboxDelegate(
-      {this.localizationController, this.supportedLocales}) {
+  _AzboxDelegate({this.localizationController, this.supportedLocales}) {
     if (kDebugMode) {
       print('Init Localization Delegate');
     }
   }
 
-   @override
-   bool isSupported(Locale locale) => supportedLocales!.contains(locale);
+  @override
+  bool isSupported(Locale locale) => supportedLocales!.contains(locale);
 
   @override
   Future<Localization> load(Locale value) async {
@@ -203,9 +199,7 @@ class _AzboxDelegate extends LocalizationsDelegate<Localization> {
       await localizationController!.loadTranslations();
     }
 
-    Localization.load(value,
-        translations: localizationController!.translations,
-        fallbackTranslations: localizationController!.fallbackTranslations);
+    Localization.load(value, translations: localizationController!.translations, fallbackTranslations: localizationController!.fallbackTranslations);
     return Future.value(Localization.instance);
   }
 
