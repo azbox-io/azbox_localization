@@ -19,7 +19,6 @@ class AzboxController extends ChangeNotifier {
   static List<Locale> supportedLocales = [];
   static Locale internalLocale = Locale('', '');
   static late AzboxAPI? _azboxApi;
-  static String boxeName = 'azbox';
   late Locale _locale;
   late List<Locale> locales = [];
 
@@ -74,12 +73,19 @@ class AzboxController extends ChangeNotifier {
     List<Locale> locales = [];
 
     if (_azboxApi != null) {
-      projects = await FlutterCacheStrategy().execute<List<dynamic>>(
+      var result = await FlutterCacheStrategy().execute<dynamic>(
         keyCache: 'projects',
-        serializer: (data) => data,
+        serializer: (data) {
+          print('<----- data');
+          return data;
+        },
         async: _azboxApi!.getProjects(),
         strategy: AsyncOrCacheStrategy(),
       );
+
+      if (result is List<dynamic>) {
+        projects = result;
+      }
     }
 
     var project = projects.firstWhere((p) => p['id'] == _azboxApi!.projectId, orElse: () => null);
@@ -130,15 +136,17 @@ class AzboxController extends ChangeNotifier {
     DateTime? afterUpdatedAt = cacheAfterUpdatedAt is String ? DateTime.parse(cacheAfterUpdatedAt) : null;
 
     if (_azboxApi != null) {
-      data = await FlutterCacheStrategy().execute<Map<String, dynamic>?>(
+      var result = await FlutterCacheStrategy().execute<Map<String, dynamic>?>(
         keyCache: 'keywords_$language',
         serializer: (data) => data,
         async: _azboxApi?.getKeywords(language: language.toUpperCase(), afterUpdatedAt: afterUpdatedAt),
         strategy: AsyncOrCacheStrategy(),
       );
+
+      if (result is Map<String, dynamic>?) {
+        data = result;
+      }
     }
-    // Set last date time loaded
-    CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
 
     if (data == null) return {};
 

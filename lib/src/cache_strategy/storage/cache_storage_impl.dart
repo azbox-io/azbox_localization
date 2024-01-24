@@ -9,7 +9,7 @@ class CacheStorage implements Storage {
   static late HiveInterface hiveInstance;
   static dynamic encryptionKey;
   static late Directory appDir;
-  static String boxeName = 'azbox';
+  static String boxeName = '_azbox_';
   CacheStorage._internal();
   static late Box<dynamic> box;
   static final CacheStorage instance = CacheStorage._internal();

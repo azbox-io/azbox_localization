@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:azbox/azbox.dart';
+import 'package:azbox/src/cache_strategy/storage/cache_storage_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
@@ -123,6 +124,8 @@ class AzboxAPI {
         project['data']['id'] = project['id'];
         projects[project['data']['keyword']] = project['data'];
       }
+      // Set last date time loaded
+      CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
       return projects;
     }
     return {};
