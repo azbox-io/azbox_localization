@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Use cache strategy for projects and keyworks.
+
 ## 1.0.2
 
 * Added Dropdown Language Selector to select between the supported locales.
