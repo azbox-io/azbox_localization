@@ -9,8 +9,6 @@ import 'package:http/http.dart' as http;
 import '../models/response_status_code.dart';
 
 const _apiURL = "https://api.azbox.io/";
-// const _apiURL = "http://127.0.0.1:5002/azbox-ee48f/us-central1/api/"; // TODO: CRIS - Change to production
-
 const _getProjects = "v1/projects";
 const _getKeywords = "v1/projects/{projectId}/keywords";
 
@@ -44,10 +42,10 @@ class AzboxAPI {
         headers: headers,
       );
 
-      if (ResponseStatusCode.SUCCESS_CODES.contains(response.statusCode)) {
+      if (ResponseStatusCode.successCodes.contains(response.statusCode)) {
         final List<dynamic> body = json.decode(response.body);
         return Result<List<dynamic>>.value(body);
-      } else if (ResponseStatusCode.ERROR_CODES.contains(response.statusCode)) {
+      } else if (ResponseStatusCode.errorCodes.contains(response.statusCode)) {
         final Map<String, dynamic> body = json.decode(response.body);
         return Result<void>.error(body['errors'].map((e) => AZError.fromJson(e)));
       } else {
@@ -58,9 +56,8 @@ class AzboxAPI {
         );
       }
     } catch (e) {
-      print(e);
       return Result<void>.error([
-        AZError(message: 'Error : ${e}'),
+        AZError(message: 'Error : $e'),
       ]);
     }
   }
@@ -83,10 +80,10 @@ class AzboxAPI {
         print(response.body);
       }
 
-      if (ResponseStatusCode.SUCCESS_CODES.contains(response.statusCode)) {
+      if (ResponseStatusCode.successCodes.contains(response.statusCode)) {
         final List<dynamic> body = json.decode(response.body);
         return Result<List<dynamic>>.value(body);
-      } else if (ResponseStatusCode.ERROR_CODES.contains(response.statusCode)) {
+      } else if (ResponseStatusCode.errorCodes.contains(response.statusCode)) {
         final Map<String, dynamic> body = json.decode(response.body);
         return Result<void>.error(body['errors'].map((e) => AZError.fromJson(e)));
       } else {

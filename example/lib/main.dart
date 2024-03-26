@@ -6,7 +6,7 @@ void main() {
 
   Azbox.ensureInitialized(
     apiKey: Constants.kAzboxApiKey,
-    projectId: Constants.kAzboxProject,);
+    projectId: Constants.kAzboxProject);
 
   runApp(
     Azbox(

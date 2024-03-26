@@ -3,14 +3,13 @@ import 'package:azbox/azbox.dart';
 import 'package:azbox/src/azbox_controller.dart';
 import 'package:azbox/src/utils/utils.dart';
 import 'package:azbox/src/widgets/az_dropdown_controller.dart';
-import 'package:azbox/src/widgets/language.dart';
 import 'package:azbox/src/widgets/languages.dart';
 import 'package:flutter/material.dart';
 
 ///Provides a customizable [DropdownButton] for all languages
 class LanguagePickerDropdown extends StatefulWidget {
-  LanguagePickerDropdown(
-      {this.itemBuilder,
+  const LanguagePickerDropdown(
+      {super.key, this.itemBuilder,
         this.controller,
         this.onValuePicked,
         this.textStyle,

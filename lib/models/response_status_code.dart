@@ -1,20 +1,20 @@
 class ResponseStatusCode {
-  static const OK = 200;
-  static const ACCEPTED = 202;
-  static const BAD_REQUEST = 400;
-  static const UNAUTHORIZED = 401;
-  static const FORBIDDEN = 403;
-  static const PAYLOAD_TOO_LARGE = 413;
+  static const ok = 200;
+  static const accepted = 202;
+  static const badRequest = 400;
+  static const unauthorized = 401;
+  static const forbidden = 403;
+  static const payloadTooLarge = 413;
 
-  static const List<int> SUCCESS_CODES = [
-    ResponseStatusCode.OK,
-    ResponseStatusCode.ACCEPTED
+  static const List<int> successCodes = [
+    ResponseStatusCode.ok,
+    ResponseStatusCode.accepted
   ];
 
-  static const List<int> ERROR_CODES = [
-    ResponseStatusCode.BAD_REQUEST,
-    ResponseStatusCode.UNAUTHORIZED,
-    ResponseStatusCode.FORBIDDEN,
-    ResponseStatusCode.PAYLOAD_TOO_LARGE
+  static const List<int> errorCodes = [
+    ResponseStatusCode.badRequest,
+    ResponseStatusCode.unauthorized,
+    ResponseStatusCode.forbidden,
+    ResponseStatusCode.payloadTooLarge
   ];
 }

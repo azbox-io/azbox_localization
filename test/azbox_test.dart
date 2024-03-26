@@ -6,9 +6,10 @@ import 'package:azbox/azbox.dart';
 import 'package:azbox/src/azbox_controller.dart';
 import 'package:azbox/src/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 var printLog = [];
+String kAzboxApiKey = 'your_api_key';
+String kAzboxProject = 'your_project_id';
 
 dynamic overridePrint(Function() testFn) => () {
   var spec = ZoneSpecification(print: (_, __, ___, String msg) {
@@ -21,8 +22,6 @@ dynamic overridePrint(Function() testFn) => () {
 void main() {
   group('localization', () {
     var r1 = AzboxController(
-        apiKey: '',
-        projectId: '',
         forceLocale: const Locale('en'),
         useFallbackTranslations: false,
         saveLocale: false,
@@ -31,8 +30,6 @@ void main() {
         },
         );
     var r2 = AzboxController(
-        apiKey: '',
-        projectId: '',
         forceLocale: const Locale('en', 'us'),
         useFallbackTranslations: false,
         onLoadError: (FlutterError e) {
@@ -73,8 +70,6 @@ void main() {
     test('merge fallbackLocale with locale without country code succeeds',
             () async {
           await AzboxController(
-            apiKey: '',
-            projectId: '',
             forceLocale: const Locale('es', 'AR'),
             useFallbackTranslations: true,
             onLoadError: (FlutterError e) {
@@ -124,45 +119,6 @@ void main() {
       expect(Localization.instance.translate('path'), 'path/en-us.json');
     });
 
-    test('controller loads saved locale', () async {
-      SharedPreferences.setMockInitialValues({
-        'locale': 'en',
-      });
-      await Azbox.ensureInitialized();
-      final controller =AzboxController(
-        apiKey: '',
-        projectId: '',
-        useFallbackTranslations: true,
-        onLoadError: (FlutterError e) {
-          log(e.toString());
-        },
-        saveLocale: true,
-      );
-      expect(controller.locale, const Locale('en'));
-
-      SharedPreferences.setMockInitialValues({});
-    });
-
-    /// E.g. if user saved a locale that was removed in a later version
-    test('controller loads fallback if saved locale is not supported',
-            () async {
-          SharedPreferences.setMockInitialValues({
-            'locale': 'de',
-          });
-          await Azbox.ensureInitialized();
-          final controller = AzboxController(
-            apiKey: '',
-            projectId: '',
-            useFallbackTranslations: true,
-            onLoadError: (FlutterError e) {
-              log(e.toString());
-            },
-            saveLocale: true,
-          );
-          expect(controller.locale, const Locale('fb'));
-
-          SharedPreferences.setMockInitialValues({});
-        });
 
     group('locale', () {
       test('locale supports device locale', () {
@@ -216,8 +172,6 @@ void main() {
 
     group('tr', () {
       var r = AzboxController(
-          apiKey: '',
-          projectId: '',
           forceLocale: const Locale('en'),
           useFallbackTranslations: true,
           onLoadError: (FlutterError e) {

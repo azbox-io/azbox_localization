@@ -1,8 +1,6 @@
 import 'package:azbox/azbox.dart';
 import 'package:azbox/src/cache_strategy/cache_strategy.dart';
-import 'package:azbox/src/cache_strategy/runners/cache_strategy.dart';
 import 'package:azbox/src/cache_strategy/storage/cache_storage_impl.dart';
-import 'package:azbox/src/cache_strategy/strategies/just_cache_strategy.dart';
 import 'package:azbox/src/codes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/
 
 import 'azbox_api.dart';
 import 'cache_strategy/strategies/async_or_cache_strategy.dart';
-import 'cache_strategy/strategies/just_async_strategy.dart';
 import 'translations.dart';
 
 class AzboxController extends ChangeNotifier {
@@ -76,7 +73,6 @@ class AzboxController extends ChangeNotifier {
       var result = await FlutterCacheStrategy().execute<dynamic>(
         keyCache: 'projects',
         serializer: (data) {
-          print('<----- data');
           return data;
         },
         async: _azboxApi!.getProjects(),
