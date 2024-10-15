@@ -94,7 +94,7 @@ class AzboxAPI {
         );
       }
     } catch (e) {
-      return Result<void>.error([AZError(message: 'Error : ${e}')]);
+      return Result<void>.error([AZError(message: 'Error : $e')]);
     }
   }
 

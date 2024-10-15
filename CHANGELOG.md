@@ -1,6 +1,10 @@
+## 1.0.4
+
+* Updated dependencies.
+
 ## 1.0.3
 
-* Use cache strategy for projects and keyworks.
+* Use cache strategy for projects and keywords.
 
 ## 1.0.2
 
