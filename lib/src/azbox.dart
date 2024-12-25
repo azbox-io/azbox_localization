@@ -11,13 +11,10 @@ import 'localization.dart';
 part 'extensions/localex.dart';
 part 'extensions/stringx.dart';
 
+
 class Azbox extends StatefulWidget {
   /// Place for your main page widget.
   final Widget child;
-
-  /// List of supported locales.
-  /// {@macro flutter.widgets.widgetsApp.supportedLocales}
-  late List<Locale> supportedLocales = [];
 
   /// Overrides device locale.
   final Locale? startLocale;
@@ -38,7 +35,7 @@ class Azbox extends StatefulWidget {
   /// @Default value `errorWidget = ErrorWidget()`
   final Widget Function(FlutterError? message)? errorWidget;
 
-  Azbox({
+  const Azbox({
     Key? key,
     required this.child,
     this.startLocale,
@@ -71,6 +68,10 @@ class _AzboxState extends State<Azbox> {
   AzboxController? localizationController;
   FlutterError? translationsLoadError;
 
+  /// List of supported locales.
+  /// {@macro flutter.widgets.widgetsApp.supportedLocales}
+  List<Locale>? supportedLocales;
+
   @override
   void initState() {
     localizationController = AzboxController(
@@ -84,7 +85,7 @@ class _AzboxState extends State<Azbox> {
       },
     );
 
-    widget.supportedLocales = localizationController!.locales;
+    supportedLocales = localizationController!.locales;
     // causes localization to rebuild with new language
     localizationController!.addListener(() {
       if (mounted) setState(() {});
@@ -109,7 +110,7 @@ class _AzboxState extends State<Azbox> {
       localizationController!,
       delegate: _AzboxDelegate(
         localizationController: localizationController,
-        supportedLocales: widget.supportedLocales,
+        supportedLocales: supportedLocales,
       ),
     );
   }
@@ -139,7 +140,7 @@ class _AzboxProvider extends InheritedWidget {
       ];
 
   /// Get List of supported locales
-  List<Locale> get supportedLocales => parent.supportedLocales;
+  List<Locale> get supportedLocales => delegate.supportedLocales!;
 
   _AzboxProvider(this.parent, this._localeState, {Key? key, required this.delegate})
       : currentLocale = _localeState.locale,
@@ -152,7 +153,7 @@ class _AzboxProvider extends InheritedWidget {
   Future<void> setLocale(Locale locale) async {
     // Check old locale
     if (locale != _localeState.locale) {
-      assert(parent.supportedLocales.contains(locale));
+      assert(supportedLocales.contains(locale));
       await _localeState.setLocale(locale);
     }
   }

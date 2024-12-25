@@ -34,10 +34,10 @@ class LanguagePickerDropdown extends StatefulWidget {
   final List<Language>? languages;
 
   @override
-  _LanguagePickerDropdownState createState() => _LanguagePickerDropdownState();
+  LanguagePickerDropdownState createState() => LanguagePickerDropdownState();
 }
 
-class _LanguagePickerDropdownState extends State<LanguagePickerDropdown> {
+class LanguagePickerDropdownState extends State<LanguagePickerDropdown> {
   late List<Language> _languages;
   late Language _selectedLanguage;
   late TextStyle _textStyle;

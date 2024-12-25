@@ -60,7 +60,6 @@ class Localization {
   }
 
   String _replaceLinks(String res, {bool logging = true}) {
-    // TODO: add recursion detection and a resolve stack.
     final matches = _linkKeyMatcher.allMatches(res);
     var result = res;
 

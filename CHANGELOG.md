@@ -1,3 +1,7 @@
+## 1.0.5
+
+* If it does not find supportedLocales, take the deviceLocale
+
 ## 1.0.4
 
 * Updated dependencies.

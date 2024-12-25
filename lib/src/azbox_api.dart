@@ -64,7 +64,7 @@ class AzboxAPI {
 
   Future<Result<void>> keywords({required String projectId, required String language, DateTime? afterUpdatedAt}) async {
     if (projectId.isEmpty) {
-      return Result<void>.value({});
+      return Result<Map<String, dynamic>>.value({});
     }
     var headers = <String, String>{};
     headers['Content-Type'] = 'application/json';

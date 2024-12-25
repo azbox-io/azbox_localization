@@ -3,7 +3,7 @@ description: Easy and fast internationalization for your Flutter Apps. Translate
 homepage: https://github.com/azbox-io/azbox-localization
 issue_tracker: https://github.com/azbox-io/azbox-localization/issues
 
-version: 1.0.4
+version: 1.0.5
 
 environment:
   sdk: '>=2.18.5 <4.0.0'

@@ -9,8 +9,8 @@ void main() {
     projectId: Constants.kAzboxProject);
 
   runApp(
-    Azbox(
-      child: const MyApp()));
+    const Azbox(
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

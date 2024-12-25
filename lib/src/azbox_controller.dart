@@ -58,11 +58,15 @@ class AzboxController extends ChangeNotifier {
 
   @visibleForTesting
   static Locale selectLocaleFrom(List<Locale> supportedLocales, Locale deviceLocale) {
-    final selectedLocale = supportedLocales.firstWhere(
-      (locale) => locale.supports(deviceLocale),
-      orElse: () => supportedLocales.first,
-    );
-    return selectedLocale;
+    try {
+      final selectedLocale = supportedLocales.firstWhere(
+            (locale) => locale.supports(deviceLocale),
+        orElse: () => supportedLocales.first,
+      );
+      return selectedLocale;
+    } catch (e) {
+      return deviceLocale;
+    }
   }
 
   static Future<List<Locale>> getSupportedLocales() async {
@@ -94,6 +98,8 @@ class AzboxController extends ChangeNotifier {
           locales.add(localeStr.toLocale());
         }
       }
+    } else {
+      locales = [_deviceLocale];
     }
     return locales;
   }
