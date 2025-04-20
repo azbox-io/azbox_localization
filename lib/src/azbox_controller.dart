@@ -91,7 +91,7 @@ class AzboxController extends ChangeNotifier {
     var project = projects.firstWhere((p) => p['id'] == _azboxApi!.projectId, orElse: () => null);
 
     if (project != null) {
-      List projectLanguages = projects[0]['data']['languages'];
+      List projectLanguages = project['data']['languages'];
       for (String projectLanguage in projectLanguages) {
         String? localeStr = Code.codes[projectLanguage];
         if (localeStr != null) {

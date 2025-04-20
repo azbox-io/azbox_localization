@@ -1,3 +1,7 @@
+## 1.0.8
+
+* Fixed when get language list
+
 ## 1.0.7
 
 * Change icon size
