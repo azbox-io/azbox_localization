@@ -1,5 +1,5 @@
 
-<p align="center"><img src="https://azbox.io/wp-content/uploads/2022/03/Recurso-2.png" width="400"/></p>
+<p align="center"><img src="https://azbox.io/_astro/logo-50.DgX_C7CJ_1U8YoD.webp" width="400"/></p>
 
 <h1 align="center"> 
 Easy and Fast internationalization for your Flutter Apps

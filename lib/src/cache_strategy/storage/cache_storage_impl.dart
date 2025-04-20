@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'storage.dart';
@@ -7,7 +7,7 @@ import 'storage.dart';
 class CacheStorage implements Storage {
   static late HiveInterface hiveInstance;
   static dynamic encryptionKey;
-  static late Directory appDir;
+  static late Directory? appDir;
   static String boxeName = '_azbox_';
   CacheStorage._internal();
   static late Box<dynamic> box;
@@ -26,7 +26,13 @@ class CacheStorage implements Storage {
   static Future<void> setUpHive() async {
     hiveInstance = Hive;
     await hiveInstance.initFlutter();
-    appDir = await getApplicationDocumentsDirectory();
+    
+    if (kIsWeb) {
+      appDir = Directory('/assets/db');
+    } else {
+      appDir = await getApplicationDocumentsDirectory();
+    }
+    
     box = await hiveInstance.openBox(boxeName);
   }
 

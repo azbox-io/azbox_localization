@@ -1,3 +1,9 @@
+## 1.0.6
+
+* Added Flutter Web compatibility for cache strategy
+* Updated dependencies to latest versions
+* Improved platform-specific storage handling
+
 ## 1.0.5
 
 * If it does not find supportedLocales, take the deviceLocale
