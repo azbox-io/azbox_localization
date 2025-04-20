@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Change icon size
+
 ## 1.0.6
 
 * Added Flutter Web compatibility for cache strategy
