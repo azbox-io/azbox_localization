@@ -1,3 +1,8 @@
+## 1.0.9
+
+* Update intl
+
+
 ## 1.0.8
 
 * Fixed when get language list
