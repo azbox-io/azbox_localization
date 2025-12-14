@@ -1,11 +1,11 @@
 
-<p align="center"><img src="https://azbox.io/_astro/logo-50.DgX_C7CJ_1U8YoD.webp" width="80"/></p>
+<p align="center"><img src="[https://azbox.io/_astro/logo-50.DgX_C7CJ_1U8YoD.webp](https://github.com/azbox-io/azbox_localization/blob/main/azbox%20logo.png)" width="80"/></p>
 
 <h1 align="center"> 
-Easy and Fast internationalization for your Flutter Apps
+Easy & Fast Flutter Localization & Translation Platform
 </h1>
 
-[![Pub Version](https://img.shields.io/pub/v/azbox-localization?style=flat-square&logo=dart)](https://pub.dev/packages/azbox_localization)
+[![Pub Version](https://img.shields.io/pub/v/azbox-localization?style=flat-square&logo=dart)](https://pub.dev/packages/azbox)
 ![Code Climate issues](https://img.shields.io/github/issues/azbox-io/azbox_localization?style=flat-square)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/azbox-io/azbox_localization?style=flat-square)
 ![GitHub contributors](https://img.shields.io/github/contributors/azbox-io/azbox_localization?style=flat-square)
