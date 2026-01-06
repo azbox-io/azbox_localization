@@ -1,5 +1,6 @@
 
-<p align="center"><img src="[https://hub.azbox.io/wp-content/uploads/2025/12/logo.png](https://hub.azbox.io/wp-content/uploads/2025/12/logo.png)" width="80"/></p>
+<p align="center"><img src="https://hub.azbox.io/wp-content/uploads/2025/12/logo.png" width="80"/></p>
+
 
 <h1 align="center"> 
 Easy & Fast Flutter Localization & Translation Platform
