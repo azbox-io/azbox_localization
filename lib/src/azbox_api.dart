@@ -121,8 +121,9 @@ class AzboxAPI {
         project['data']['id'] = project['id'];
         projects[project['data']['keyword']] = project['data'];
       }
-      // Set last date time loaded
-      CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
+      // Update afterUpdatedAt only when API is actually called (not when using cache)
+      // This enables incremental sync for future API calls
+      await CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
       return projects;
     }
     return {};

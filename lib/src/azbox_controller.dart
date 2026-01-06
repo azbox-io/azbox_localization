@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 
 import 'azbox_api.dart';
-import 'cache_strategy/strategies/async_or_cache_strategy.dart';
+import 'cache_strategy/strategies/cache_or_async_strategy.dart';
 import 'translations.dart';
 
 class AzboxController extends ChangeNotifier {
@@ -80,7 +80,7 @@ class AzboxController extends ChangeNotifier {
           return data;
         },
         async: _azboxApi!.getProjects(),
-        strategy: AsyncOrCacheStrategy(),
+        strategy: CacheOrAsyncStrategy(),
       );
 
       if (result is List<dynamic>) {
@@ -133,20 +133,25 @@ class AzboxController extends ChangeNotifier {
 
     String language = Code.codes.keys.firstWhere((k) => Code.codes[k] == locale.toStringWithSeparator(), orElse: () => Code.codes.keys.first);
 
-    // Get last date time loaded
+    // Get last date time loaded for incremental sync (only used when cache is expired and API is called)
     dynamic cacheAfterUpdatedAt = CacheStorage().read('afterUpdatedAt');
     DateTime? afterUpdatedAt = cacheAfterUpdatedAt is String ? DateTime.parse(cacheAfterUpdatedAt) : null;
 
     if (_azboxApi != null) {
+      // Use CacheOrAsyncStrategy: check cache first, only call API if cache is missing or expired
+      // TTL set to 24 hours (86400000 ms) for keywords as they don't change frequently
       var result = await FlutterCacheStrategy().execute<Map<String, dynamic>?>(
         keyCache: 'keywords_$language',
         serializer: (data) => data,
         async: _azboxApi?.getKeywords(language: language.toUpperCase(), afterUpdatedAt: afterUpdatedAt),
-        strategy: AsyncOrCacheStrategy(),
+        strategy: CacheOrAsyncStrategy(),
+        timeToLiveValue: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
       );
 
       if (result is Map<String, dynamic>?) {
         data = result;
+        // Only update afterUpdatedAt if we got data from API (not from cache)
+        // This is handled in getKeywords when API is actually called
       }
     }
 

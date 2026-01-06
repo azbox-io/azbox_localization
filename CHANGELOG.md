@@ -1,3 +1,10 @@
+## 1.0.10
+
+* Optimized cache strategy to prioritize cache over API calls, significantly reducing network requests
+* Increased cache TTL for keywords to 24 hours to improve performance and reduce API usage
+* Improved incremental synchronization logic for better cache management
+* Enhanced offline experience by checking cache first before making API calls
+
 ## 1.0.9
 
 * Update intl
