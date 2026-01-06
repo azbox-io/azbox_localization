@@ -61,8 +61,38 @@ class LanguagePickerDropdownState extends State<LanguagePickerDropdown> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Update selected language based on current context locale when widget rebuilds
+    // This ensures the dropdown shows the correct language when returning to the screen
+    if (widget.controller == null) {
+      final currentLocale = context.locale;
+      final currentLanguage = _languages.firstWhere(
+        (language) => language.isoCode == currentLocale.toStringWithSeparator(),
+        orElse: () => _selectedLanguage,
+      );
+      if (currentLanguage != _selectedLanguage) {
+        setState(() {
+          _selectedLanguage = currentLanguage;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     _textStyle = widget.textStyle ?? const TextStyle();
+    
+    // Get current language from context locale to ensure correct display
+    // This is a computed value, not state, so it's safe to use in build
+    final currentLocale = context.locale;
+    final displayedLanguage = widget.controller != null 
+        ? _selectedLanguage 
+        : _languages.firstWhere(
+            (language) => language.isoCode == currentLocale.toStringWithSeparator(),
+            orElse: () => _selectedLanguage,
+          );
+    
     List<DropdownMenuItem<Language>> items = _languages
         .map((language) => DropdownMenuItem<Language>(
         value: language,
@@ -82,7 +112,7 @@ class LanguagePickerDropdownState extends State<LanguagePickerDropdown> {
           });
         },
         items: items,
-        value: _selectedLanguage,
+        value: displayedLanguage,
       ),
     );
   }
@@ -98,7 +128,12 @@ class LanguagePickerDropdownState extends State<LanguagePickerDropdown> {
 
   Language getSelectedLanguage() {
     List<Language> languages = Languages.defaultLanguages;
-    return languages.firstWhere((language) => language.isoCode == AzboxController.internalLocale.toStringWithSeparator(), orElse:() => supportedLanguages().first);
+    // Try to get from internalLocale first, but fallback to first supported language
+    final localeString = AzboxController.internalLocale.toStringWithSeparator();
+    return languages.firstWhere(
+      (language) => language.isoCode == localeString,
+      orElse: () => supportedLanguages().first,
+    );
   }
 
   List<Language> supportedLanguages() {
