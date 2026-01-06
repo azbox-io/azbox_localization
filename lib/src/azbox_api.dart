@@ -122,8 +122,10 @@ class AzboxAPI {
         projects[project['data']['keyword']] = project['data'];
       }
       // Update afterUpdatedAt only when API is actually called (not when using cache)
-      // This enables incremental sync for future API calls
-      await CacheStorage().write('afterUpdatedAt', DateTime.now().toIso8601String());
+      // Store per language to avoid conflicts when switching languages
+      // This enables incremental sync for future API calls of the same language
+      String afterUpdatedAtKey = 'afterUpdatedAt_$language';
+      await CacheStorage().write(afterUpdatedAtKey, DateTime.now().toIso8601String());
       return projects;
     }
     return {};

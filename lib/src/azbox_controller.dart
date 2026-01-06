@@ -133,29 +133,48 @@ class AzboxController extends ChangeNotifier {
 
     String language = Code.codes.keys.firstWhere((k) => Code.codes[k] == locale.toStringWithSeparator(), orElse: () => Code.codes.keys.first);
 
-    // Get last date time loaded for incremental sync (only used when cache is expired and API is called)
-    dynamic cacheAfterUpdatedAt = CacheStorage().read('afterUpdatedAt');
+    // Get last date time loaded for incremental sync (specific per language)
+    // Only use afterUpdatedAt if we have previously successfully loaded this language
+    // For first-time language loads, don't use afterUpdatedAt
+    String afterUpdatedAtKey = 'afterUpdatedAt_$language';
+    dynamic cacheAfterUpdatedAt = CacheStorage().read(afterUpdatedAtKey);
     DateTime? afterUpdatedAt = cacheAfterUpdatedAt is String ? DateTime.parse(cacheAfterUpdatedAt) : null;
+    
+    // If afterUpdatedAt is null, this is the first time loading this language
+    bool isFirstTimeLoad = afterUpdatedAt == null;
 
     if (_azboxApi != null) {
       // Use CacheOrAsyncStrategy: check cache first, only call API if cache is missing or expired
       // TTL set to 24 hours (86400000 ms) for keywords as they don't change frequently
       var result = await FlutterCacheStrategy().execute<Map<String, dynamic>?>(
         keyCache: 'keywords_$language',
-        serializer: (data) => data,
-        async: _azboxApi?.getKeywords(language: language.toUpperCase(), afterUpdatedAt: afterUpdatedAt),
+        serializer: (data) {
+          // If cached data is an empty map, return null to force API call
+          if (data is Map && (data.isEmpty || data.length == 0)) {
+            return null;
+          }
+          return data;
+        },
+        async: _azboxApi?.getKeywords(
+          language: language.toUpperCase(), 
+          afterUpdatedAt: isFirstTimeLoad ? null : afterUpdatedAt,
+        ),
         strategy: CacheOrAsyncStrategy(),
         timeToLiveValue: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
       );
 
       if (result is Map<String, dynamic>?) {
         data = result;
-        // Only update afterUpdatedAt if we got data from API (not from cache)
-        // This is handled in getKeywords when API is actually called
+        // If we got an empty map from cache or API, clear cache and try again without afterUpdatedAt
+        if (data != null && data.isEmpty) {
+          await FlutterCacheStrategy().clearCache(keyCache: 'keywords_$language');
+          // Try again without afterUpdatedAt (first time load)
+          data = await _azboxApi?.getKeywords(language: language.toUpperCase(), afterUpdatedAt: null);
+        }
       }
     }
 
-    if (data == null) return {};
+    if (data == null || data.isEmpty) return {};
 
     return data;
   }

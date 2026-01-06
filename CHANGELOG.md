@@ -1,3 +1,7 @@
+## 1.0.12
+
+* Fixed language switching issue by making afterUpdatedAt language-specific
+
 ## 1.0.10
 
 * Optimized cache strategy to prioritize cache over API calls, significantly reducing network requests
@@ -8,7 +12,6 @@
 ## 1.0.9
 
 * Update intl
-
 
 ## 1.0.8
 
