@@ -1,3 +1,7 @@
+## 1.0.14
+
+* Increased cache TTL for keywords to 24 hours to improve performance and reduce API usage
+
 ## 1.0.13
 
 * Fixed language switching and dropdown display issues
@@ -13,7 +17,6 @@
 ## 1.0.10
 
 * Optimized cache strategy to prioritize cache over API calls, significantly reducing network requests
-* Increased cache TTL for keywords to 24 hours to improve performance and reduce API usage
 * Improved incremental synchronization logic for better cache management
 
 ## 1.0.9

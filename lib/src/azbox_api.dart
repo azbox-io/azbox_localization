@@ -38,7 +38,7 @@ class AzboxAPI {
 
     try {
       final response = await http.get(
-        Uri.parse('$_apiURL$_getProjects?token=$_apiKey'),
+        Uri.parse('$_apiURL$_getProjects?api_key=$_apiKey'),
         headers: headers,
       );
 
@@ -72,7 +72,7 @@ class AzboxAPI {
     try {
       String afterUpdatedAtStr = afterUpdatedAt == null ? '' : '&afterUpdatedAtStr=${afterUpdatedAt.toIso8601String()}';
       final response = await http.get(
-        Uri.parse('$_apiURL${_getKeywords.replaceAll("{projectId}", projectId)}?token=$_apiKey&language=$language$afterUpdatedAtStr'),
+        Uri.parse('$_apiURL${_getKeywords.replaceAll("{projectId}", projectId)}?api_key=$_apiKey&language=$language$afterUpdatedAtStr'),
         headers: headers,
       );
 
