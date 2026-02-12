@@ -70,12 +70,12 @@ class AzboxController extends ChangeNotifier {
   }
 
   static Future<List<Locale>> getSupportedLocales() async {
-    List<dynamic> projects = [];
+    Map<String, dynamic>? project;
     List<Locale> locales = [];
 
     if (_azboxApi != null) {
       var result = await FlutterCacheStrategy().execute<dynamic>(
-        keyCache: 'projects',
+        keyCache: 'project_${_azboxApi!.projectId}',
         serializer: (data) {
           return data;
         },
@@ -83,15 +83,13 @@ class AzboxController extends ChangeNotifier {
         strategy: CacheOrAsyncStrategy(),
       );
 
-      if (result is List<dynamic>) {
-        projects = result;
+      if (result is Map<String, dynamic>) {
+        project = result;
       }
     }
 
-    var project = projects.firstWhere((p) => p['id'] == _azboxApi!.projectId, orElse: () => null);
-
     if (project != null) {
-      List projectLanguages = project['data']['languages'];
+      List projectLanguages = project['languages'] ?? [];
       for (String projectLanguage in projectLanguages) {
         String? localeStr = Code.codes[projectLanguage];
         if (localeStr != null) {
@@ -150,7 +148,7 @@ class AzboxController extends ChangeNotifier {
         keyCache: 'keywords_$language',
         serializer: (data) {
           // If cached data is an empty map, return null to force API call
-          if (data is Map && (data.isEmpty || data.length == 0)) {
+          if (data is Map && (data.isEmpty)) {
             return null;
           }
           return data;

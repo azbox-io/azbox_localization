@@ -4,7 +4,7 @@ class CacheWrapper<T> {
 
   CacheWrapper(this.data, this.cachedDate);
 
-  CacheWrapper.fromJson(json)
+  CacheWrapper.fromJson(Map<String, dynamic> json)
       : cachedDate = json['cachedDate'],
         data = json['data'];
 

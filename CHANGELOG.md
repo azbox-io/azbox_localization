@@ -1,3 +1,11 @@
+## 1.0.16
+
+* Improved API performance by fetching only the current project.
+
+## 1.0.15
+
+* Fixed API error handling when `errors` field is null to avoid `NoSuchMethodError` and return a proper `AZError`.
+
 ## 1.0.14
 
 * Increased cache TTL for keywords to 24 hours to improve performance and reduce API usage

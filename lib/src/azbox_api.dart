@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../models/response_status_code.dart';
 
 const _apiURL = "https://api.azbox.io/";
-const _getProjects = "v1/projects";
+const _getProject = "v1/projects/{projectId}";
 const _getKeywords = "v1/projects/{projectId}/keywords";
 
 class AzboxAPI {
@@ -38,16 +38,25 @@ class AzboxAPI {
 
     try {
       final response = await http.get(
-        Uri.parse('$_apiURL$_getProjects?api_key=$_apiKey'),
+        Uri.parse('$_apiURL${_getProject.replaceAll("{projectId}", _project)}?api_key=$_apiKey'),
         headers: headers,
       );
 
       if (ResponseStatusCode.successCodes.contains(response.statusCode)) {
-        final List<dynamic> body = json.decode(response.body);
-        return Result<List<dynamic>>.value(body);
+        final Map<String, dynamic> body = json.decode(response.body);
+        return Result<Map<String, dynamic>>.value(body);
       } else if (ResponseStatusCode.errorCodes.contains(response.statusCode)) {
         final Map<String, dynamic> body = json.decode(response.body);
-        return Result<void>.error(body['errors'].map((e) => AZError.fromJson(e)));
+        final dynamic errors = body['errors'];
+        if (errors is List) {
+          return Result<void>.error(errors.map<AZError>((e) => AZError.fromJson(e)).toList());
+        }
+        // Fallback when "errors" is missing or null
+        return Result<void>.error(
+          [
+            AZError(message: body['message']?.toString() ?? 'Status Code: ${response.statusCode}'),
+          ],
+        );
       } else {
         return Result<void>.error(
           [
@@ -85,7 +94,16 @@ class AzboxAPI {
         return Result<List<dynamic>>.value(body);
       } else if (ResponseStatusCode.errorCodes.contains(response.statusCode)) {
         final Map<String, dynamic> body = json.decode(response.body);
-        return Result<void>.error(body['errors'].map((e) => AZError.fromJson(e)));
+        final dynamic errors = body['errors'];
+        if (errors is List) {
+          return Result<void>.error(errors.map<AZError>((e) => AZError.fromJson(e)).toList());
+        }
+        // Fallback when "errors" is missing or null
+        return Result<void>.error(
+          [
+            AZError(message: body['message']?.toString() ?? 'Status Code: ${response.statusCode}'),
+          ],
+        );
       } else {
         return Result<void>.error(
           [
@@ -98,7 +116,7 @@ class AzboxAPI {
     }
   }
 
-  Future<List<dynamic>> getProjects() async {
+  Future<Map<String, dynamic>> getProjects() async {
     Result result = (await projects());
 
     if (result is ValueResult && result.isValue) {
@@ -108,7 +126,7 @@ class AzboxAPI {
     if (result is ErrorResult && result.isError) {
       throw result.error;
     }
-    return [];
+    return {};
   }
 
   Future<Map<String, dynamic>> getKeywords({required String language, DateTime? afterUpdatedAt}) async {

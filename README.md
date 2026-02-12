@@ -376,3 +376,6 @@ Text(LocaleKeys.title).translate(); //Widget
 ```dart
 Locale('en', 'US').toStringWithSeparator(separator: '|') // en|US
 ```
+
+
+dart pub publish

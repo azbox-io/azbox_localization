@@ -36,13 +36,13 @@ class Azbox extends StatefulWidget {
   final Widget Function(FlutterError? message)? errorWidget;
 
   const Azbox({
-    Key? key,
+    super.key,
     required this.child,
     this.startLocale,
     this.useFallbackTranslations = false,
     this.saveLocale = true,
     this.errorWidget,
-  }) : super(key: key);
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -142,9 +142,9 @@ class _AzboxProvider extends InheritedWidget {
   /// Get List of supported locales
   List<Locale> get supportedLocales => delegate.supportedLocales!;
 
-  _AzboxProvider(this.parent, this._localeState, {Key? key, required this.delegate})
+  _AzboxProvider(this.parent, this._localeState, {required this.delegate})
       : currentLocale = _localeState.locale,
-        super(key: key, child: parent.child);
+        super(child: parent.child);
 
   /// Get current locale
   Locale get locale => _localeState.locale;
