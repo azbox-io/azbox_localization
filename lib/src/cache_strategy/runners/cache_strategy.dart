@@ -17,7 +17,7 @@ abstract class CacheStrategy {
     }
   }
 
-  _isValid<T>(CacheWrapper<T> cacheWrapper, bool keepExpiredCache, int ttlValue) => keepExpiredCache || DateTime.now().millisecondsSinceEpoch < cacheWrapper.cachedDate + ttlValue;
+  bool _isValid<T>(CacheWrapper<T> cacheWrapper, bool keepExpiredCache, int ttlValue) => keepExpiredCache || DateTime.now().millisecondsSinceEpoch < cacheWrapper.cachedDate + ttlValue;
 
   Future<T> invokeAsync<T>(AsyncBloc<T>? asyncBloc, String keyCache, String boxeName, Storage storage) async {
     try {
